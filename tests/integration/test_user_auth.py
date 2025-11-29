@@ -194,3 +194,95 @@ def test_missing_password_registration(db_session):
     # Adjust the expected error message
     with pytest.raises(ValueError, match="Password must be at least 6 characters long"):
         User.register(db_session, test_data)
+
+def test_register_duplicate_email(client):
+    first = {
+        "first_name": "A",
+        "last_name": "B",
+        "email": "dupe@example.com",
+        "username": "user1",
+        "password": "secret123",
+    }
+
+    second = {
+        "first_name": "C",
+        "last_name": "D",
+        "email": "dupe@example.com",  # same email
+        "username": "user2",
+        "password": "secret123",
+    }
+
+    client.post("/users/register", json=first)
+    response = client.post("/users/register", json=second)
+
+    assert response.status_code == 400
+    assert response.json()["detail"] == "Email already exists"
+
+
+def test_register_duplicate_username(client):
+    first = {
+        "first_name": "A",
+        "last_name": "B",
+        "email": "unique1@example.com",
+        "username": "sameuser",
+        "password": "secret123",
+    }
+
+    second = {
+        "first_name": "C",
+        "last_name": "D",
+        "email": "unique2@example.com",
+        "username": "sameuser",  # same username
+        "password": "secret123",
+    }
+
+    client.post("/users/register", json=first)
+    response = client.post("/users/register", json=second)
+
+    assert response.status_code == 400
+    assert response.json()["detail"] == "Username already exists"
+
+
+def test_login_success(client):
+    reg = {
+        "first_name": "Jane",
+        "last_name": "Smith",
+        "email": "jane@example.com",
+        "username": "janesmith",
+        "password": "mypassword"
+    }
+    client.post("/users/register", json=reg)
+
+    login = {
+        "username": "janesmith",
+        "password": "myppassword"
+    }
+
+    # Fix: correct password
+    login["password"] = reg["password"]
+
+    response = client.post("/users/login", json=login)
+    assert response.status_code == 200
+
+    data = response.json()
+    assert data["username"] == "janesmith"
+    assert "user_id" in data
+
+
+def test_login_invalid_password(client):
+    reg = {
+        "first_name": "Mike",
+        "last_name": "Tyson",
+        "email": "mike@example.com",
+        "username": "mikety",
+        "password": "abc12345"
+    }
+    client.post("/users/register", json=reg)
+
+    response = client.post("/users/login", json={
+        "username": "mikety",
+        "password": "wrongpass"
+    })
+
+    assert response.status_code == 401
+    assert response.json()["detail"] == "Invalid username or password"
