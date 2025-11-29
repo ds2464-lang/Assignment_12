@@ -273,5 +273,5 @@ def pytest_collection_modifyitems(config, items):
                 item.add_marker(skip_slow)
 
 @pytest.fixture
-def client(fastapi_serer):
+def client(fastapi_server):
     return fastapi_server
