@@ -272,6 +272,3 @@ def pytest_collection_modifyitems(config, items):
             if "slow" in item.keywords:
                 item.add_marker(skip_slow)
 
-@pytest.fixture
-def client(fastapi_server):
-    return fastapi_server
