@@ -272,3 +272,9 @@ def pytest_collection_modifyitems(config, items):
             if "slow" in item.keywords:
                 item.add_marker(skip_slow)
 
+from fastapi.testclient import TestClient
+from app.main import app
+
+@pytest.fixture
+def client():
+    return TestClient(app)

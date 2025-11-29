@@ -13,6 +13,8 @@ from app.schemas.calculation import CalculationBase, CalculationResponse, Calcul
 from app.schemas.token import TokenResponse
 from app.schemas.user import UserCreate, UserResponse, UserLogin
 from app.database import Base, get_db, engine
+from app.routes.user import router as user_router
+
 
 # Create tables on startup
 @asynccontextmanager
@@ -28,6 +30,8 @@ app = FastAPI(
     version="1.0.0",
     lifespan=lifespan
 )
+app.include_router(user_router)   # <-- enables /users/register and /users/login
+
 
 # ------------------------------------------------------------------------------
 # Health Endpoint

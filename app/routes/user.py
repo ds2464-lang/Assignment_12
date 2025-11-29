@@ -2,12 +2,12 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models.user import User
-from app.schemas.user import UserCreate, UserRead, UserLogin
+from app.schemas.user import UserCreate, UserResponse, UserLogin
 
 router = APIRouter(prefix="/users", tags=["users"])
 
 
-@router.post("/register", response_model=UserRead, status_code=201)
+@router.post("/register", response_model=UserResponse, status_code=201)
 def register_user(payload: UserCreate, db: Session = Depends(get_db)):
     # Check unique email
     if db.query(User).filter(User.email == payload.email).first():
