@@ -13,6 +13,7 @@ from app.schemas.calculation import CalculationBase, CalculationResponse, Calcul
 from app.schemas.token import TokenResponse
 from app.schemas.user import UserCreate, UserResponse, UserLogin
 from app.database import Base, get_db, engine
+from app.operations import user, calculation
 
 
 # Create tables on startup
@@ -29,7 +30,8 @@ app = FastAPI(
     version="1.0.0",
     lifespan=lifespan
 )
-
+app.include_router(user.router)
+app.include_router(calculation.router)
 
 # ------------------------------------------------------------------------------
 # Health Endpoint

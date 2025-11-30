@@ -2,7 +2,7 @@
 from datetime import datetime
 import uuid
 from typing import List
-from sqlalchemy import Column, String, DateTime, ForeignKey, JSON, Float
+from sqlalchemy import Column, String, DateTime, ForeignKey, JSON, Float, Integer
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship, declared_attr
 from sqlalchemy.ext.declarative import declared_attr
