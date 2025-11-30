@@ -13,7 +13,6 @@ from app.schemas.calculation import CalculationBase, CalculationResponse, Calcul
 from app.schemas.token import TokenResponse
 from app.schemas.user import UserCreate, UserResponse, UserLogin
 from app.database import Base, get_db, engine
-from app.routes.user import router as user_router
 
 
 # Create tables on startup
