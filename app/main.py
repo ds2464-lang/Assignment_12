@@ -29,7 +29,6 @@ app = FastAPI(
     version="1.0.0",
     lifespan=lifespan
 )
-app.include_router(user_router)   # <-- enables /users/register and /users/login
 
 
 # ------------------------------------------------------------------------------
